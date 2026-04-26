@@ -1,0 +1,88 @@
+参照すべきサイト
+
+### おすすめの学習サイト
+**APG4b (AtCoder Programming Guide for beginners)**
+AtCoder公式が提供しているC++入門教材だ。すでにPythonでアルゴリズムを組める状態なら、第1章と第2章の「C++の文法・仕様」のページだけを辞書代わりに拾い読みすれば十分だ。第3章以降のアルゴリズム自体の解説は知っている内容が多いはずなので、適宜飛ばして構わない。
+
+
+### Python → C++ 競プロ文法 変換表
+
+AtCoderで頻出する処理の書き換え方を整理しておく。前回VS Codeに登録したテンプレート（`rep`マクロや`all`マクロ、`ll`のエイリアス）を使う前提の記述だ。
+
+#### 1. 変数と型
+Pythonと異なり、C++ではすべての変数に「型」の宣言が必要だ。競プロで特に気を付けるべきは整数の上限で、通常の `int` は約 $2 \times 10^9$ までしか扱えない。それを超える場合は `long long`（テンプレートの `ll`）を使う。
+
+```cpp
+// Python: n = 10**18
+ll n = 1e18;
+
+// Python: s = "hello"
+string s = "hello";
+
+// Python: x, y = 10, 20
+int x = 10, y = 20;
+```
+
+#### 2. 配列（1次元・2次元）
+ここが最初の壁になる。C++では可変長配列として `vector` を使う。
+
+```cpp
+// --- 1次元配列 ---
+// Python: a = [0] * N
+vector<int> a(N, 0);  // 0で初期化（省略可）
+
+// 要素の追加
+// Python: a.append(5)
+a.push_back(5);
+
+// --- 2次元配列（グリッド） ---
+// Python: grid = [[0] * W for _ in range(H)]
+vector<vector<int>> grid(H, vector<int>(W, 0));
+```
+
+#### 3. 文字列操作
+連結は `+` でそのままできるが、Pythonの強力なスライス機能は使えない。部分文字列の取得は `substr` を使うが、引数の意味が「終了位置」ではなく「文字数」であるという罠がある。
+
+```cpp
+// Python: s = "abc" + "def"
+string s = "abc" + "def";
+
+// Python: sub = s[1:4] (インデックス1から3まで、計3文字)
+// C++: substr(開始位置, 文字数)
+string sub = s.substr(1, 3);
+```
+
+#### 4. 辞書と集合 (Dict / Set)
+Pythonの `dict` は `map`、`set` は `set` に対応する。メソッド名が変わる点に注意。
+
+```cpp
+// --- Set (集合) ---
+// Python: s = set(); s.add(5); 5 in s
+set<int> s;
+s.insert(5);
+if (s.count(5)) { /* 存在する場合の処理 */ }
+
+// --- Dict (連想配列) ---
+// Python: d = {}; d["apple"] = 10;
+map<string, int> d;
+d["apple"] = 10;
+```
+
+#### 5. ソートと反転
+配列の操作には、標準ライブラリの関数とテンプレートの `all()` マクロを組み合わせる。
+
+```cpp
+// Python: a.sort()
+sort(all(a));
+
+// Python: a.sort(reverse=True) (降順)
+sort(a.rbegin(), a.rend());
+
+// Python: a.reverse()
+reverse(all(a));
+```
+
+---
+
+最初は変数の型宣言忘れや、末尾のセミコロン `;` 忘れで大量のコンパイルエラーに直面するはずだ。
+とりあえず、すでにPythonで解法が完全に分かっている過去問を1問、この文法を参考に翻訳してみてほしい。手始めにどの問題（例: ABC300のC問題など）から着手する予定だろうか？
